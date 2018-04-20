@@ -15,6 +15,11 @@ public interface SeckillDao {
     int reduceNumber(long seckillId, Date killTIme);
 
 
+    /**
+     * 根据id查询秒杀对象
+     * @param seckillId
+     * @return
+     */
     Seckill queryBiId(long seckillId);
 
     /**

@@ -1,24 +1,19 @@
 package com.syl.dao;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-        int a[] = new int[n];
-        int change = n/(2*m);
-        int count = 0;
-        for (int i = 0;i<n;i++){
-            a[i]= i+1;
-            count++;
-            if (count == count){
-                a[i] = -a[i];
-                count=0;
-            }
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection c = DriverManager.getConnection("jdbc:mysql://119.29.103.39:3306/seckill?characterEncoding=utf-8&useSSL=false","sui","1311150301");
+            System.out.println(c);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        System.out.println(Arrays.toString(a));
     }
 }
