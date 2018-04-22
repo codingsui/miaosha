@@ -10,16 +10,26 @@
         AND NUMBER > 0;
     </update>
 
-    <select id="queryBiId" resultType="Seckill" parameterType="long">
-        SELECT seckill_id,name,number,start_time,end_time.create_time
+    <select id="queryBiId" resultType="com.syl.entity.Seckill" parameterType="long">
+        SELECT seckill_id,name,number,start_time,end_time,create_time
         FROM seckill
         WHERE seckill_id = #{seckillId}
     </select>
 
-    <select id="queryAll" resultType="Seckill">
-        SELECT seckill_id,name,number,start_time,end_time.create_time
+    <select id="queryAll" resultType="com.syl.entity.Seckill">
+        SELECT seckill_id,name,number,start_time,end_time,create_time
         FROM seckill
         ORDER by create_time DESC
         limit #{offset},#{limit}
+    </select>
+
+    <!--  mybatis 调用存储过程-->
+    <select id="killByProcedure" statementType="CALLABLE">
+        CALL execute_seckill(
+                #{seckillId,jdbcType=BIGINT,mode=IN},
+                #{phone,jdbcType=BIGINT,mode=IN},
+                #{killTime,jdbcType=TIMESTAMP,mode=IN},
+                #{result,jdbcType=INTEGER,mode=OUT}
+        )
     </select>
 </mapper>

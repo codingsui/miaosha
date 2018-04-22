@@ -27,12 +27,14 @@
         <!--<property name="acquireRetryAttempts" value="30" />-->
     <!--</bean>-->
     <!-- 2.数据库连接池 -->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="driverClassName" value="${drive}"/>
-        <property name="url" value="${url}"/>
-        <property name="username" value="${username}"/>
-        <property name="password" value="${password}"/>
-
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" >
+        <property name="driverClassName" value="${db.driverClassName}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <!-- 连接池启动时的初始值 -->
+        <property name="initialSize" value="${db.initialSize}"/>
+        <!-- 连接池的最大值 -->
         <property name="maxActive" value="${db.maxActive}"/>
         <!-- 最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 -->
         <property name="maxIdle" value="${db.maxIdle}"/>
@@ -58,6 +60,7 @@
         <property name="validationQuery" value="SELECT 1"/>
         <!--指明是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个.-->
         <property name="testOnBorrow" value="true"/>
+
     </bean>
     <!-- 3.配置sqlSessionFactory对象 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -71,11 +74,17 @@
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>
 
-    <!-- 4.配置扫描Dao接口包，动态是想爱你Dao接口，注入到spring容器中 -->
+    <!-- 4.配置扫描Dao接口包，动态是Dao接口，注入到spring容器中 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!-- 注入sqlSessionFaction -->
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <!-- 给出扫描dao接口包 -->
         <property name="basePackage" value="com.syl.dao"/>
+    </bean>
+
+    <!-- -->
+    <bean id="redisDao" class="com.syl.dao.cache.RedisDao">
+        <constructor-arg index="0" value="119.29.103.39"/>
+        <constructor-arg index="1" value="6379"/>
     </bean>
 </beans>
